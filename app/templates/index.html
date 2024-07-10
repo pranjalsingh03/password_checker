@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Evaluation Tool</title>
+</head>
+<body>
+    <h1>Password Evaluation Tool</h1>
+    <form id="passwordForm">
+        <label for="password">Enter a password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Evaluate</button>
+    </form>
+    <div id="results">
+        <p>Password strength: <span id="strength"></span></p>
+        <p>Estimated time to crack: <span id="timeToCrack"></span></p>
+    </div>
+
+    <script>
+        document.getElementById('passwordForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+
+            fetch('/evaluate', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('strength').textContent = data.strength;
+                document.getElementById('timeToCrack').textContent = data.time_to_crack;
+            });
+        });
+    </script>
+</body>
+</html>
